@@ -1,16 +1,59 @@
-# product_app
+# Product Management Flutter App
 
-A new Flutter project.
+Flutter app with **Login**, **Product List/Search**, and **Create/Update** forms with validation.
 
-## Getting Started
+## Requirements
+* Flutter SDK (stable)
+* Android Studio/SDK, device or emulator
 
-This project is a starting point for a Flutter application.
+## Setup
 
-A few resources to get you started if this is your first Flutter project:
+### 1. Install Dependencies
+```bash
+flutter pub get
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 2. Configure API URL
+Edit `lib/services/api_client.dart`:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**For Android Emulator:**
+```dart
+static const baseUrl = 'http://10.0.2.2:5000/api';
+```
+
+## Run
+```bash
+flutter devices
+flutter run -d <deviceId>
+```
+
+**Login:** `admin / admin123`
+
+## App Structure
+```
+lib/
+ ├─ models/product.dart
+ ├─ services/
+ │   ├─ api_client.dart
+ │   ├─ auth_service.dart
+ │   └─ product_service.dart
+ ├─ screens/
+ │   ├─ login_page.dart
+ │   ├─ product_list_page.dart
+ │   └─ product_form_page.dart
+ └─ main.dart
+```
+
+## Features
+* **Auth**: Login → store JWT → auto-attach to API calls
+* **List/Search**: Query by code/name, display all product fields
+* **Create/Update**: Client validation (required fields, numeric price)
+
+## Troubleshooting
+* **Slow first build**: Run `flutter doctor -v`
+
+## Demo Flow
+1. Login (`admin/admin123`)
+2. Create product 
+3. Search `product` → see results
+4. Tap item → edit → save → verify changes
