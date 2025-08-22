@@ -14,12 +14,15 @@ flutter pub get
 ```
 
 ### 2. Configure API URL
-Edit `lib/services/api_client.dart`:
-
-**For Android Emulator:**
-```dart
-static const baseUrl = 'http://10.0.2.2:5000/api';
+Copy `.env.example` to `.env` and update:
+```bash
+cp .env.example .env
 ```
+
+Edit `.env` file:
+```bash
+# For Android Emulator
+API_BASE_URL=http://10.0.2.2:5000/api
 
 ## Run
 ```bash
@@ -29,19 +32,21 @@ flutter run -d <deviceId>
 
 **Login:** `admin / admin123`
 
-## App Structure
+## Project Structure
 ```
-lib/
- ├─ models/product.dart
- ├─ services/
- │   ├─ api_client.dart
- │   ├─ auth_service.dart
- │   └─ product_service.dart
- ├─ screens/
- │   ├─ login_page.dart
- │   ├─ product_list_page.dart
- │   └─ product_form_page.dart
- └─ main.dart
+project/
+ ├─ .env                 # Your environment config (create from .env.example)
+ └─ lib/
+     ├─ models/product.dart
+     ├─ services/
+     │   ├─ api_client.dart
+     │   ├─ auth_service.dart
+     │   └─ product_service.dart
+     ├─ screens/
+     │   ├─ login_page.dart
+     │   ├─ product_list_page.dart
+     │   └─ product_form_page.dart
+     └─ main.dart
 ```
 
 ## Features
@@ -57,3 +62,10 @@ lib/
 2. Create product 
 3. Search `product` → see results
 4. Tap item → edit → save → verify changes
+
+## Environment Files
+Create `.env.example` in your project root:
+```bash
+# .env.example
+API_BASE_URL=http://10.0.0.21:5000/api
+```
