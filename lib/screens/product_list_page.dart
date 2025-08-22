@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/product_service.dart';
+import '../services/auth_service.dart'; // <-- add this import
 
-class ProductListPage extends StatefulWidget { const ProductListPage({super.key}); @override State<ProductListPage> createState()=>_ProductListPageState(); }
+class ProductListPage extends StatefulWidget {
+  const ProductListPage({super.key});
+  @override
+  State<ProductListPage> createState() => _ProductListPageState();
+}
 
 class _ProductListPageState extends State<ProductListPage> {
   final _q = TextEditingController();
@@ -10,15 +15,35 @@ class _ProductListPageState extends State<ProductListPage> {
   bool _loading = false;
 
   Future<void> _search() async {
-    setState(()=>_loading=true);
-    try { _items = await ProductService.search(_q.text); }
-    finally { setState(()=>_loading=false); }
+    setState(() => _loading = true);
+    try {
+      _items = await ProductService.search(_q.text);
+    } finally {
+      setState(() => _loading = false);
+    }
   }
 
   @override
   Widget build(BuildContext ctx) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Products')),
+      appBar: AppBar(
+        title: const Text('Products'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () async {
+              await AuthService.logout();        // clear stored token
+              if (mounted) {
+                Navigator.pushReplacementNamed(
+                  context,
+                  '/',                             // back to login screen
+                );
+              }
+            },
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final created = await Navigator.pushNamed(context, '/create');
@@ -34,7 +59,10 @@ class _ProductListPageState extends State<ProductListPage> {
               controller: _q,
               decoration: InputDecoration(
                 labelText: 'Search by code or name',
-                suffixIcon: IconButton(icon: const Icon(Icons.search), onPressed: _search),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: _search,
+                ),
               ),
               onSubmitted: (_) => _search(),
             ),
@@ -50,7 +78,11 @@ class _ProductListPageState extends State<ProductListPage> {
                     title: Text('${p.productCode} — ${p.productName}'),
                     subtitle: Text('Price: ${p.price.toStringAsFixed(2)}'),
                     onTap: () async {
-                      final updated = await Navigator.pushNamed(context, '/edit', arguments: p);
+                      final updated = await Navigator.pushNamed(
+                        context,
+                        '/edit',
+                        arguments: p,
+                      );
                       if (updated == true) _search();
                     },
                   );
